@@ -13,16 +13,16 @@ basadas en los documentos.
 
 Archivos recomendados:
 
--   `documentos/arquitectura-rag.drawio` - diseño editable.
--   `documentos/arquitectura-rag-documental-ia.png` - imagen para GitHub.
+-   `docs/arquitectura-rag.drawio` - diseño editable.
+-   `docs/arquitectura-rag-documental-ia.png` - imagen para GitHub.
 
 El sistema implementa un pipeline RAG completamente local, desde la ingesta y recuperación de información hasta la generación de respuestas mediante un LLM ejecutado en LM Studio.
 
-![Arquitectura RAG](documentos/arquitectura-rag-documental-ia.png)
+![Arquitectura RAG](docs/arquitectura-rag-documental-ia.png)
 
 El diseño editable de la arquitectura está disponible en:
 
-[📐 Abrir arquitectura editable en draw.io](documentos/arquitectura-rag.drawio)
+[📐 Abrir arquitectura editable en draw.io](docs/arquitectura-rag-documental.drawio)
 
 ### Flujo
 

@@ -1,0 +1,97 @@
+<mxfile host="app.diagrams.net" modified="2026-09-11T10:45:00.000Z" agent="ChatGPT" version="24.7.17">
+  <diagram id="rag-architecture" name="Arquitectura RAG">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="Arquitectura RAG - Gestor Documental" style="text;html=1;align=center;verticalAlign=middle;fontSize=28;fontStyle=1;fontColor=#0B2E59;" vertex="1" parent="1">
+          <mxGeometry x="430" y="20" width="740" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="Asistente de documentación con IA local" style="text;html=1;align=center;verticalAlign=middle;fontSize=17;fontColor=#355B85;" vertex="1" parent="1">
+          <mxGeometry x="520" y="68" width="560" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="github" value="&lt;b&gt;GitHub&lt;/b&gt;&lt;br&gt;Repositorio del proyecto&lt;br&gt;• Código fuente&lt;br&gt;• README y documentación&lt;br&gt;• Versionado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F7FA;strokeColor=#7D8CA3;fontColor=#102A43;fontSize=14;align=left;spacingLeft=14;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="35" y="25" width="300" height="120" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="user" value="&lt;b&gt;Usuario&lt;/b&gt;&lt;br&gt;Pregunta en lenguaje natural" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF4FF;strokeColor=#6AA9E9;fontColor=#102A43;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="610" y="115" width="380" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ingestPanel" value="&lt;b&gt;Ingesta de documentos&lt;/b&gt;" style="swimlane;html=1;rounded=1;startSize=38;fillColor=#F1FBF3;strokeColor=#7BCB8A;fontColor=#146B3A;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="35" y="210" width="330" height="610" as="geometry"/>
+        </mxCell>
+        <mxCell id="pdf" value="&lt;b&gt;Documentos PDF&lt;/b&gt;&lt;br&gt;Manuales, guías, procedimientos..." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7BCB8A;fontColor=#12344D;fontSize=14;" vertex="1" parent="ingestPanel">
+          <mxGeometry x="30" y="65" width="270" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="extract" value="&lt;b&gt;Extracción de texto&lt;/b&gt;&lt;br&gt;PyMuPDF&lt;br&gt;Conserva documento y página" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF4FF;strokeColor=#6AA9E9;fontColor=#12344D;fontSize=14;" vertex="1" parent="ingestPanel">
+          <mxGeometry x="30" y="180" width="270" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="chunk" value="&lt;b&gt;Chunking&lt;/b&gt;&lt;br&gt;Fragmentos por párrafos&lt;br&gt;Tamaño máximo + metadatos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF8EE;strokeColor=#62B879;fontColor=#12344D;fontSize=14;" vertex="1" parent="ingestPanel">
+          <mxGeometry x="30" y="310" width="270" height="95" as="geometry"/>
+        </mxCell>
+        <mxCell id="embed" value="&lt;b&gt;Embeddings&lt;/b&gt;&lt;br&gt;Sentence Transformers&lt;br&gt;paraphrase-multilingual-MiniLM-L12-v2&lt;br&gt;Vectores de 384 dimensiones" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EAFE;strokeColor=#9B73D7;fontColor=#12344D;fontSize=14;" vertex="1" parent="ingestPanel">
+          <mxGeometry x="30" y="445" width="270" height="115" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ragPanel" value="&lt;b&gt;Sistema RAG (Python / VS Code)&lt;/b&gt;" style="swimlane;html=1;rounded=1;startSize=38;fillColor=#F5FBFF;strokeColor=#7BBCE8;fontColor=#173B67;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="395" y="210" width="760" height="610" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="semantic" value="&lt;b&gt;Búsqueda semántica&lt;/b&gt;&lt;br&gt;Cosine similarity&lt;br&gt;Encuentra significado similar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EAFE;strokeColor=#9B73D7;fontColor=#2F1A63;fontSize=14;" vertex="1" parent="ragPanel">
+          <mxGeometry x="40" y="85" width="260" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="bm25" value="&lt;b&gt;Búsqueda léxica&lt;/b&gt;&lt;br&gt;BM25&lt;br&gt;Encuentra coincidencias por palabras clave" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8EEFF;strokeColor=#AA79D6;fontColor=#2F1A63;fontSize=14;" vertex="1" parent="ragPanel">
+          <mxGeometry x="330" y="85" width="260" height="115" as="geometry"/>
+        </mxCell>
+        <mxCell id="fusion" value="&lt;b&gt;Hybrid Search&lt;/b&gt;&lt;br&gt;70% semántico + 30% BM25&lt;br&gt;Combina y ordena scores" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFECEF;strokeColor=#E58A9B;fontColor=#6B2334;fontSize=14;" vertex="1" parent="ragPanel">
+          <mxGeometry x="185" y="245" width="260" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="topk" value="&lt;b&gt;Top K chunks&lt;/b&gt;&lt;br&gt;Selecciona los fragmentos más relevantes&lt;br&gt;Documento + página + texto" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF4FF;strokeColor=#6AA9E9;fontColor=#12344D;fontSize=14;" vertex="1" parent="ragPanel">
+          <mxGeometry x="185" y="390" width="260" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="prompt" value="&lt;b&gt;Prompt aumentado&lt;/b&gt;&lt;br&gt;Instrucciones + pregunta + Top K chunks&lt;br&gt;Regla: no inventar información" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF6DF;strokeColor=#E8B85B;fontColor=#5B4212;fontSize=14;" vertex="1" parent="ragPanel">
+          <mxGeometry x="475" y="390" width="245" height="105" as="geometry"/>
+        </mxCell>
+        <mxCell id="vectorNote" value="&lt;b&gt;Índice vectorial actual&lt;/b&gt;&lt;br&gt;Embeddings mantenidos en memoria durante la ejecución&lt;br&gt;&lt;i&gt;Evolución futura: Qdrant / FAISS&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF6FF;strokeColor=#89AEE0;fontColor=#12344D;fontSize=13;" vertex="1" parent="ragPanel">
+          <mxGeometry x="40" y="520" width="405" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="genPanel" value="&lt;b&gt;Generación de respuesta&lt;/b&gt;" style="swimlane;html=1;rounded=1;startSize=38;fillColor=#FFF9EC;strokeColor=#E8C46B;fontColor=#674B12;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1185" y="210" width="360" height="610" as="geometry"/>
+        </mxCell>
+        <mxCell id="lm" value="&lt;b&gt;LM Studio&lt;/b&gt;&lt;br&gt;Servidor local&lt;br&gt;http://localhost:1234/v1&lt;br&gt;&lt;b&gt;Qwen3 4B Instruct 2507&lt;/b&gt; (GGUF Q4_K_M)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F2EAFE;strokeColor=#8B67C9;fontColor=#2F1A63;fontSize=14;" vertex="1" parent="genPanel">
+          <mxGeometry x="35" y="95" width="290" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="answer" value="&lt;b&gt;Respuesta basada en contexto&lt;/b&gt;&lt;br&gt;Lenguaje natural&lt;br&gt;Sin usar conocimiento externo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF4FF;strokeColor=#6AA9E9;fontColor=#12344D;fontSize=14;" vertex="1" parent="genPanel">
+          <mxGeometry x="35" y="285" width="290" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="sources" value="&lt;b&gt;Fuentes&lt;/b&gt;&lt;br&gt;Documento + página&lt;br&gt;Fragmentos recuperados y score" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EAF8EE;strokeColor=#62B879;fontColor=#175C31;fontSize=14;" vertex="1" parent="genPanel">
+          <mxGeometry x="35" y="445" width="290" height="95" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="runtime" value="&lt;b&gt;Entorno de ejecución&lt;/b&gt;&lt;br&gt;Windows · VS Code · Python · PyMuPDF · Sentence Transformers · scikit-learn · rank-bm25 · NumPy · requests · LM Studio" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#AAB7C4;fontColor=#243B53;fontSize=14;align=center;" vertex="1" parent="1">
+          <mxGeometry x="35" y="850" width="1510" height="85" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#357ABD;" edge="1" parent="1" source="user" target="semantic"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#357ABD;" edge="1" parent="1" source="user" target="bm25"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#278A4B;" edge="1" parent="1" source="pdf" target="extract"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#278A4B;" edge="1" parent="1" source="extract" target="chunk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#278A4B;" edge="1" parent="1" source="chunk" target="embed"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#6F42C1;" edge="1" parent="1" source="embed" target="semantic"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#6F42C1;" edge="1" parent="1" source="semantic" target="fusion"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#6F42C1;" edge="1" parent="1" source="bm25" target="fusion"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#357ABD;" edge="1" parent="1" source="fusion" target="topk"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#357ABD;" edge="1" parent="1" source="topk" target="prompt"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#C08A23;" edge="1" parent="1" source="prompt" target="lm"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#C08A23;" edge="1" parent="1" source="lm" target="answer"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#278A4B;" edge="1" parent="1" source="answer" target="sources"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#357ABD;dashed=1;" edge="1" parent="1" source="sources" target="user"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e15" value="git push / versionado" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeWidth=2;strokeColor=#66788A;dashed=1;fontSize=12;" edge="1" parent="1" source="ragPanel" target="github"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
