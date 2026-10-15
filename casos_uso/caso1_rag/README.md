@@ -9,7 +9,7 @@ Archivos recomendados:
 
 El sistema implementa un pipeline RAG completamente local, desde la ingesta y recuperación de información hasta la generación de respuestas mediante un LLM ejecutado en LM Studio.
 
-![Arquitectura RAG](docs/arquitectura-rag-documental-ia.png)
+![Arquitectura RAG](../../docs/arquitectura-rag-documental-ia.png)
 
 El diseño editable de la arquitectura está disponible en:
 
