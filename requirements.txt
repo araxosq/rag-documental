@@ -1,2 +1,10 @@
-pymupdf sentence-transformers numpy scikit-learn rank-bm25 requests
+pymupdf 
+sentence-transformers 
+numpy 
+scikit-learn 
+rank-bm25 
+requests
 truststore
+pydantic
+google-genai
+python-dotenv

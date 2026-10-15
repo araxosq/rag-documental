@@ -1,0 +1,10 @@
+{
+  "tipo_documento": "Contrato de prestación de servicios tecnológicos",
+  "cliente": "ACME Retail España, S.A.",
+  "proveedor": "CloudData Solutions, S.L.",
+  "importe": 120000.0,
+  "fecha_inicio": "2026-02-01",
+  "fecha_fin": "2027-01-31",
+  "sla": "99.90% disponibilidad mensual; respuesta Sev1 30 min; resolución objetivo 4 h",
+  "confidencialidad": "ALTA"
+}
