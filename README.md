@@ -13,6 +13,15 @@ Consulta inteligente sobre documentos PDF mediante chunking, embeddings, búsque
 Extracción de información desde documentos, normalización y validación con Pydantic y persistencia en JSON.
 [Ver Caso 2 - Extracción de metadatos](casos_uso/caso2_metadatos/README.md)
 
+### Caso 3 - Agente documental
+Combina ambos.
+[Ver Caso 3 - Agente documental](casos_uso/caso3_agente_revision/README.md)
+
+## Arquitectura
+La arquitectura actual es la siguiente:
+[Ver diseño](docs/arquitectura-general.png)
+
+
 ## Seguridad
 Si el repositorio es público:
 
