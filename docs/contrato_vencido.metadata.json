@@ -1,0 +1,10 @@
+{
+  "tipo_documento": "Contrato de soporte de infraestructura",
+  "cliente": "Industrial Services, S.A.",
+  "proveedor": "InfraSupport Europe, S.L.",
+  "importe": 60000.0,
+  "fecha_inicio": "2025-01-01",
+  "fecha_fin": "2026-09-30",
+  "sla": "Respuesta crítica en menos de 1 hora",
+  "confidencialidad": "MEDIA"
+}
