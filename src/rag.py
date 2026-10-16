@@ -14,7 +14,7 @@ import requests
 # CONFIGURACIÓN
 # --------------------------------
 
-ruta = Path("documentos/documento_prueba_rag.pdf")
+ruta = Path("docs/documento_prueba_rag.pdf")
 
 TAMANO_MAX_CHUNK = 800
 TOP_K = 3
@@ -27,61 +27,66 @@ MODELO_LLM = "qwen3-4b-instruct-2507"
 
 
 # --------------------------------
-# 1. LEER DOCUMENTO
+# 1. LEER DOCUMENTO Y CREAR CHUNKS
 # --------------------------------
 
-documento = pymupdf.open(ruta)
+def cargar_documento_y_chunks():
+    documento = pymupdf.open(ruta)
 
-chunks = []
+    chunks = []
 
-for numero_pagina, pagina in enumerate(documento, start=1):
+    for numero_pagina, pagina in enumerate(documento, start=1):
 
-    texto = pagina.get_text().strip()
+        texto = pagina.get_text().strip()
 
-    if not texto:
-        continue
+        if not texto:
+            continue
 
-    parrafos = [
-        p.strip()
-        for p in texto.split("\n")
-        if len(p.strip()) > 40
-    ]
+        parrafos = [
+            p.strip()
+            for p in texto.split("\n")
+            if len(p.strip()) > 40
+        ]
 
-    chunk_actual = ""
+        chunk_actual = ""
 
-    for parrafo in parrafos:
+        for parrafo in parrafos:
 
-        if len(chunk_actual) + len(parrafo) <= TAMANO_MAX_CHUNK:
+            if len(chunk_actual) + len(parrafo) <= TAMANO_MAX_CHUNK:
 
-            chunk_actual += " " + parrafo
+                chunk_actual += " " + parrafo
 
-        else:
+            else:
 
-            if chunk_actual.strip():
+                if chunk_actual.strip():
 
-                chunks.append({
-                    "documento": ruta.name,
-                    "pagina": numero_pagina,
-                    "texto": chunk_actual.strip()
-                })
+                    chunks.append({
+                        "documento": ruta.name,
+                        "pagina": numero_pagina,
+                        "texto": chunk_actual.strip()
+                    })
 
-            chunk_actual = parrafo
+                chunk_actual = parrafo
 
-    if chunk_actual.strip():
+        if chunk_actual.strip():
 
-        chunks.append({
-            "documento": ruta.name,
-            "pagina": numero_pagina,
-            "texto": chunk_actual.strip()
-        })
+            chunks.append({
+                "documento": ruta.name,
+                "pagina": numero_pagina,
+                "texto": chunk_actual.strip()
+            })
 
+    return chunks
+
+
+# --------------------------------
+# 2. PREPARAR RAG
+# --------------------------------
+
+print("Cargando documento...")
+chunks = cargar_documento_y_chunks()
 
 print(f"Chunks creados: {len(chunks)}")
-
-
-# --------------------------------
-# 2. EMBEDDINGS
-# --------------------------------
 
 print("Cargando modelo de embeddings...")
 
@@ -101,11 +106,6 @@ embeddings_documentos = modelo_embeddings.encode(
     normalize_embeddings=True
 )
 
-
-# --------------------------------
-# 3. BM25
-# --------------------------------
-
 textos_tokenizados = [
     texto.lower().split()
     for texto in textos
@@ -117,95 +117,76 @@ bm25 = BM25Okapi(
 
 
 # --------------------------------
-# 4. PREGUNTA
+# 3. FUNCIÓN RAG REUTILIZABLE
 # --------------------------------
 
-pregunta = input(
-    "\nEscribe tu pregunta: "
-)
+def consultar_rag(pregunta: str) -> str:
+    """
+    Consulta el documento mediante RAG y devuelve una respuesta
+    basada únicamente en el contenido recuperado.
+    """
 
-
-# --------------------------------
-# 5. BÚSQUEDA SEMÁNTICA
-# --------------------------------
-
-embedding_pregunta = modelo_embeddings.encode(
-    [pregunta],
-    normalize_embeddings=True
-)
-
-scores_semanticos = cosine_similarity(
-    embedding_pregunta,
-    embeddings_documentos
-)[0]
-
-
-# --------------------------------
-# 6. BM25
-# --------------------------------
-
-pregunta_tokenizada = (
-    pregunta
-    .lower()
-    .split()
-)
-
-scores_bm25 = bm25.get_scores(
-    pregunta_tokenizada
-)
-
-if scores_bm25.max() > 0:
-
-    scores_bm25 = (
-        scores_bm25 /
-        scores_bm25.max()
+    # Búsqueda semántica
+    embedding_pregunta = modelo_embeddings.encode(
+        [pregunta],
+        normalize_embeddings=True
     )
 
+    scores_semanticos = cosine_similarity(
+        embedding_pregunta,
+        embeddings_documentos
+    )[0]
 
-# --------------------------------
-# 7. COMBINAR SCORES
-# --------------------------------
-
-scores_finales = (
-    PESO_SEMANTICO * scores_semanticos
-    +
-    PESO_BM25 * scores_bm25
-)
-
-indices = np.argsort(
-    scores_finales
-)[::-1][:TOP_K]
-
-
-# --------------------------------
-# 8. CREAR CONTEXTO
-# --------------------------------
-
-contexto = ""
-
-fuentes = []
-
-for indice in indices:
-
-    chunk = chunks[indice]
-
-    contexto += (
-        f"\nDOCUMENTO: {chunk['documento']}\n"
-        f"PÁGINA: {chunk['pagina']}\n"
-        f"TEXTO:\n{chunk['texto']}\n"
-        f"{'-' * 60}\n"
+    # BM25
+    pregunta_tokenizada = (
+        pregunta
+        .lower()
+        .split()
     )
 
-    fuentes.append(
-        f"{chunk['documento']} - página {chunk['pagina']}"
+    scores_bm25 = bm25.get_scores(
+        pregunta_tokenizada
     )
 
+    if scores_bm25.max() > 0:
+        scores_bm25 = (
+            scores_bm25 /
+            scores_bm25.max()
+        )
 
-# --------------------------------
-# 9. PROMPT
-# --------------------------------
+    # Combinar scores
+    scores_finales = (
+        PESO_SEMANTICO * scores_semanticos
+        +
+        PESO_BM25 * scores_bm25
+    )
 
-prompt = f"""
+    indices = np.argsort(
+        scores_finales
+    )[::-1][:TOP_K]
+
+    # Crear contexto
+    contexto = ""
+
+    fuentes = []
+
+    for indice in indices:
+
+        chunk = chunks[indice]
+
+        contexto += (
+            f"\nDOCUMENTO: {chunk['documento']}\n"
+            f"PÁGINA: {chunk['pagina']}\n"
+            f"TEXTO:\n{chunk['texto']}\n"
+            f"{'-' * 60}\n"
+        )
+
+        fuentes.append(
+            f"{chunk['documento']} - página {chunk['pagina']}"
+        )
+
+    # Prompt
+    prompt = f"""
 Eres un asistente especializado en gestión documental.
 
 Debes responder únicamente utilizando la información
@@ -229,79 +210,61 @@ PREGUNTA:
 {pregunta}
 """
 
+    # Llamar a LM Studio
+    payload = {
+        "model": MODELO_LLM,
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "Eres un asistente documental. "
+                    "Solo puedes responder usando "
+                    "el contexto proporcionado."
+                )
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        "temperature": 0.1
+    }
 
-# --------------------------------
-# 10. LLAMAR A LM STUDIO
-# --------------------------------
-
-payload = {
-    "model": MODELO_LLM,
-    "messages": [
-        {
-            "role": "system",
-            "content": (
-                "Eres un asistente documental. "
-                "Solo puedes responder usando "
-                "el contexto proporcionado."
-            )
-        },
-        {
-            "role": "user",
-            "content": prompt
-        }
-    ],
-    "temperature": 0.1
-}
-
-
-print("\nConsultando el LLM...\n")
-
-respuesta = requests.post(
-    LM_STUDIO_URL,
-    json=payload,
-    timeout=120
-)
-
-respuesta.raise_for_status()
-
-datos = respuesta.json()
-
-respuesta_final = (
-    datos["choices"][0]
-    ["message"]
-    ["content"]
-)
-
-
-# --------------------------------
-# 11. MOSTRAR RESPUESTA
-# --------------------------------
-
-print("=" * 70)
-print("RESPUESTA DEL RAG")
-print("=" * 70)
-
-print(respuesta_final)
-
-
-print("\n" + "=" * 70)
-print("FRAGMENTOS RECUPERADOS")
-print("=" * 70)
-
-for i, indice in enumerate(
-    indices,
-    start=1
-):
-
-    chunk = chunks[indice]
-
-    print(
-        f"\n{i}. "
-        f"{chunk['documento']} "
-        f"- página {chunk['pagina']}"
+    respuesta = requests.post(
+        LM_STUDIO_URL,
+        json=payload,
+        timeout=120
     )
 
-    print(
-        f"Score: "
-        f"{scores_finales[indice]:.3f}"
+    respuesta.raise_for_status()
+
+    datos = respuesta.json()
+
+    respuesta_final = (
+        datos["choices"][0]
+        ["message"]
+        ["content"]
     )
+
+    return respuesta_final
+
+
+# --------------------------------
+# 4. MODO INTERACTIVO
+# --------------------------------
+
+if __name__ == "__main__":
+
+    pregunta = input(
+        "\nEscribe tu pregunta: "
+    )
+
+    respuesta_final = consultar_rag(
+        pregunta
+    )
+
+    print("=" * 70)
+    print("RESPUESTA DEL RAG")
+    print("=" * 70)
+
+    print(respuesta_final)

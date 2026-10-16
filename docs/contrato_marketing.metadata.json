@@ -1,0 +1,10 @@
+{
+  "tipo_documento": "Contrato de servicios de marketing digital",
+  "cliente": "MarketPlus, S.A.",
+  "proveedor": "Digital Wave Agency, S.L.",
+  "importe": 45000.0,
+  "fecha_inicio": "2026-06-01",
+  "fecha_fin": "2028-05-31",
+  "sla": "Entrega mensual de informes y campañas",
+  "confidencialidad": "MEDIA"
+}

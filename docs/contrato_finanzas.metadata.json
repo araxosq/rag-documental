@@ -1,0 +1,10 @@
+{
+  "tipo_documento": "Contrato de mantenimiento de plataforma financiera",
+  "cliente": "Finance Corp España, S.A.",
+  "proveedor": "TechOps Iberia, S.L.",
+  "importe": 85000.0,
+  "fecha_inicio": "2025-12-01",
+  "fecha_fin": "2026-12-15",
+  "sla": "99.95% disponibilidad mensual",
+  "confidencialidad": "ALTA"
+}

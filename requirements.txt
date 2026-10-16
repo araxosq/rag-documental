@@ -8,3 +8,4 @@ truststore
 pydantic
 google-genai
 python-dotenv
+google-adk
