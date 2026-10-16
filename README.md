@@ -19,7 +19,7 @@ Combina ambos.
 
 ## Arquitectura
 La arquitectura actual es la siguiente:
-[Ver diseño](docs/arquitectura-general.png)
+![Arquitectura](docs/arquitectura-general.png)
 
 
 ## Seguridad
