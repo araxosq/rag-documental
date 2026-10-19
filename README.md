@@ -15,7 +15,7 @@ Extracción de información desde documentos, normalización y validación con P
 
 ### Caso 3 - Agente documental
 Combina ambos.
-[Ver Caso 3 - Agente documental](casos_uso/caso3_agente_revision/README.md)
+[Ver Caso 3 - Agente documental](casos_uso/caso3_agente/README.md)
 
 ## Arquitectura
 La arquitectura actual es la siguiente:
