@@ -13,6 +13,12 @@ El agente actúa como una capa de orquestación que decide qué herramientas uti
 
 ---
 
+# Arquitectura
+
+![Arquitectura Caso 3](../../docs/arquitectura-caso3-agente.png.png)
+
+---
+
 # Problema que resuelve
 
 Una organización puede tener cientos o miles de contratos.
